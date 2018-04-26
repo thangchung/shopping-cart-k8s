@@ -25,7 +25,7 @@ $catalogDockerfile = "src/services/catalogs/Dockerfile"
 Write-Output "Removing $catalogImage..."
 docker rmi -f $catalogImage
 Write-Output "Removing $catalogImage..."
-docker build -f $catalogDockerfile -t $catalogImage .
-docker tag $catalogImage $catalogImageLatest
+docker build -f $catalogDockerfile -t $catalogImage -t $catalogImageLatest .
+# docker tag $catalogImage $catalogImageLatest
 
 remove_dangling_images

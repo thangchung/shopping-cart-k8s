@@ -24,7 +24,7 @@ Building microservices application (Shopping Cart Application) using Kubernetes 
 - After installed `minikube`, then run 
 
 ```
-minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
+> minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
 ```
 
 ## Setup Istio
@@ -33,37 +33,64 @@ minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual
 - Upzip it into your disk, let say `D:\istio\` 
 
 - Run
+
 ```
-minikube docker-env
+> minikube docker-env
 ```
+
+- Copy and Run
+
+```
+> @FOR /f "tokens=*" %i IN ('minikube docker-env') DO @%i
+```
+
+From now on, we can type `docker images` to list out all images in Kubernetes local node.
 
 - `cd` into `D:\istio\`, then run
 
 ```
-kubectl apply -f install/kubernetes/istio.yaml
-kubectl apply -f install/kubernetes/istio-auth.yaml
+> kubectl apply -f install/kubernetes/istio.yaml
+> kubectl apply -f install/kubernetes/istio-auth.yaml
 ```
 
-- Inject the sidecards into microservices as following 
+## Build our own microservices
+
+- Build our microservices by running
 
 ```
-istioctl kube-inject -f k8s/shopping-cart.yaml | kubectl apply -f -
+> powershell -f build-all.ps1
+```
+
+- Then if you want to just test it then run following commands
+
+```
+> cd k8s
+> kubectl apply -f shopping-cart.yaml
+```
+
+- In reality, we need to inject the **sidecards** into microservices as following 
+
+```
+> cd k8s
+> istioctl kube-inject -f shopping-cart.yaml | kubectl apply -f -
 ```
 
 ### Dashboard
 
 ```
-minikube dashboard
+> minikube dashboard
+```
+
+![](assets\minikube-ui.png)
+
+```
+> kubectl get svc -n istio-system
 ```
 
 ```
-kubectl get svc -n istio-system
+> export GATEWAY_URL=$(kubectl get po -l istio-ingress -n istio-system -o jsonpath='{.items[0].status.hostIP}'):$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')
 ```
 
 ```
-export GATEWAY_URL=$(kubectl get po -l istio-ingress -n istio-system -o jsonpath='{.items[0].status.hostIP}'):$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')
-```
-
-```
-curl $GETWAY_URL
+> curl $GETWAY_URL
 ```

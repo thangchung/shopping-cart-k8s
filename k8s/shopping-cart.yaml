@@ -33,6 +33,45 @@ spec:
         ports:
         - containerPort: 80
 ---
+##################################################################################################
+# Email service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-service
+  labels:
+    app: email-service
+spec:
+  ports:
+  - name: smtp
+    port: 25
+    targetPort: smtp
+  - name: http
+    port: 80
+  selector:
+    app: email-service
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: email-service-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: email-service
+        version: v1
+    spec:
+      containers:
+      - name: email-service
+        image: djfarrelly/maildev:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 25
+        - containerPort: 80
+---
 ###########################################################################
 # Ingress resource (gateway)
 ##########################################################################
@@ -46,8 +85,12 @@ spec:
   rules:
   - http:
       paths:
-      - path: /api/*
+      - path: /.*
+        backend:
+          serviceName: email-service
+          servicePort: 80
+      - path: /api.*
         backend:
           serviceName: catalogs
-          servicePort: 9080
+          servicePort: 80
 ---

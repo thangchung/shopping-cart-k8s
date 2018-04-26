@@ -1,7 +1,12 @@
-### Shopping Cart (Microservices)
+# Shopping Cart (Microservices)
 Building microservices application (Shopping Cart Application) using Kubernetes + Istio with its ecosystem parts.
 
-### Prerequisites
+> ### Disclamation 
+> - Should have `MINIKUBE_HOME` environment variable in your machine, and value should point to `C:\users\<your name>\`
+> - Should run powershell script to create `minikube` machine in `C:` drive.
+> - If it threw the exception that it couldn't find out `minikube` machine in Hyper-V so just simply delete everything in `<user>/.minikube` folder, but we could keep `cache` folder to avoid download everything from scratch, then runs it subsequently.
+
+## Prerequisites
 - Hyper-V
 - Docker
 - Kubernetes (minikube v0.25.2 for windows)
@@ -9,35 +14,37 @@ Building microservices application (Shopping Cart Application) using Kubernetes 
 - .NET Core SDK
 - NodeJS
 
-> ### Disclamation 
-> - Should run powershell script to create `minikube` machine in `C:` drive
-> - Should open Hyper-V for creating `minikube` machine, otherwise it will throw an exception that it couldn't find out `minikube` machine in Hyper-V
-
-### Setup Kubernetes
+## Setup Local Kubernetes
 - Using minikube for Windows in this project, but you can use Mac or Linux version as well
 
-### Setup Istio
-- After you have minikube installed on your machine, run following command:
+- Download the appropriate package of your minikube at https://github.com/kubernetes/minikube/releases (We use `v0.25.2` in this project)
+
+- Install it into your machine (Windows 10 in this case)
+
+- After installed `minikube`, then run 
 
 ```
 minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
 ```
 
-- Run 
+## Setup Istio
+- Download the appropriate package of Istio at https://github.com/istio/istio/releases 
 
+- Upzip it into your disk, let say `D:\istio\` 
+
+- Run
 ```
 minikube docker-env
 ```
 
-- Istio
+- `cd` into `D:\istio\`, then run
 
 ```
-cd istio
 kubectl apply -f install/kubernetes/istio.yaml
 kubectl apply -f install/kubernetes/istio-auth.yaml
 ```
 
-- Inject SideCard into services as
+- Inject the sidecards into microservices as following 
 
 ```
 istioctl kube-inject -f k8s/shopping-cart.yaml | kubectl apply -f -
@@ -46,7 +53,7 @@ istioctl kube-inject -f k8s/shopping-cart.yaml | kubectl apply -f -
 ### Dashboard
 
 ```
-minukube dashboard
+minikube dashboard
 ```
 
 ```

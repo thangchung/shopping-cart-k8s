@@ -1,0 +1,53 @@
+##################################################################################################
+# Catalog service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogs
+  labels:
+    app: catalogs
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: catalogs
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: catalogs-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: catalogs
+        version: v1
+    spec:
+      containers:
+      - name: catalogs
+        image: shopping-cart/catalogs:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+###########################################################################
+# Ingress resource (gateway)
+##########################################################################
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway
+  annotations:
+    kubernetes.io/ingress.class: "istio"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/*
+        backend:
+          serviceName: catalogs
+          servicePort: 9080
+---

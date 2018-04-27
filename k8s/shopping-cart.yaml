@@ -72,25 +72,35 @@ spec:
         - containerPort: 25
         - containerPort: 80
 ---
-###########################################################################
-# Ingress resource (gateway)
-##########################################################################
-apiVersion: extensions/v1beta1
-kind: Ingress
+##################################################################################################
+# Ambassador service
+##################################################################################################
+apiVersion: v1
+kind: Service
 metadata:
-  name: gateway
+  labels:
+    service: ambassador
+  name: ambassador
   annotations:
-    kubernetes.io/ingress.class: "istio"
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: catalogs_mapping
+      prefix: /c/
+      service: catalogs:80
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: email_mapping
+      prefix: /e/
+      service: email-service:80
 spec:
-  rules:
-  - http:
-      paths:
-      - path: /.*
-        backend:
-          serviceName: email-service
-          servicePort: 80
-      - path: /api.*
-        backend:
-          serviceName: catalogs
-          servicePort: 80
+  type: LoadBalancer
+  ports:
+  - name: ambassador
+    port: 80
+    targetPort: 80
+  selector:
+    service: ambassador
 ---

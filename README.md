@@ -1,44 +1,50 @@
-# Shopping Cart (Microservices)
+# Shopping Cart Application with Microservices Approach
+
 Building microservices application (Shopping Cart Application) using Kubernetes + Istio with its ecosystem parts.
 
-> ### Disclamation 
-> - Should have `MINIKUBE_HOME` environment variable in your machine, and value should point to `C:\users\<your name>\`
-> - Should run powershell script to create `minikube` machine in `C:` drive.
-> - If it threw the exception that it couldn't find out `minikube` machine in Hyper-V so just simply delete everything in `<user>/.minikube` folder, but we could keep `cache` folder to avoid download everything from scratch, then runs it subsequently.
+> ### Disclamation
+>
+> * Should have `MINIKUBE_HOME` environment variable in your machine, and value should point to `C:\users\<your name>\`
+> * Should run powershell script to create `minikube` machine in `C:` drive.
+> * If it threw the exception that it couldn't find out `minikube` machine in Hyper-V so just simply delete everything in `<user>/.minikube` folder, but we could keep `cache` folder to avoid download everything from scratch, then runs it subsequently.
 
 ## Prerequisites
-- Hyper-V
-- Docker
-- Kubernetes (minikube v0.25.2 for windows)
-- Istio
-- .NET Core SDK
-- NodeJS
+
+* [Hyper-V](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview)
+* [Docker](https://www.docker.com)
+* [Kubernetes](https://kubernetes.io) ([minikube](https://github.com/kubernetes/minikube) v0.25.2 for windows)
+* [Istio](https://istio.io)
+* [Ambassador](https://www.getambassador.io)
+* [.NET Core SDK](https://www.microsoft.com/net/download/windows)
+* [NodeJS](https://nodejs.org)
 
 ## Setup Local Kubernetes
-- Using minikube for Windows in this project, but you can use Mac or Linux version as well
 
-- Download the appropriate package of your minikube at https://github.com/kubernetes/minikube/releases (We use `v0.25.2` in this project)
+* Using minikube for Windows in this project, but you can use Mac or Linux version as well
 
-- Install it into your machine (Windows 10 in this case)
+* Download the appropriate package of your minikube at https://github.com/kubernetes/minikube/releases (We use `v0.25.2` in this project)
 
-- After installed `minikube`, then run 
+* Install it into your machine (Windows 10 in this case)
+
+* After installed `minikube`, then run
 
 ```
 > minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
 ```
 
 ## Setup Istio
-- Download the appropriate package of Istio at https://github.com/istio/istio/releases 
 
-- Upzip it into your disk, let say `D:\istio\` 
+* Download the appropriate package of Istio at https://github.com/istio/istio/releases
 
-- Run
+* Upzip it into your disk, let say `D:\istio\`
+
+* Run
 
 ```
 > minikube docker-env
 ```
 
-- Copy and Run
+* Copy and Run
 
 ```
 > @FOR /f "tokens=*" %i IN ('minikube docker-env') DO @%i
@@ -46,34 +52,70 @@ Building microservices application (Shopping Cart Application) using Kubernetes 
 
 From now on, we can type `docker images` to list out all images in Kubernetes local node.
 
-- `cd` into `D:\istio\`, then run
+* `cd` into `D:\istio\`, then run
 
 ```
 > kubectl apply -f install/kubernetes/istio.yaml
 > kubectl apply -f install/kubernetes/istio-auth.yaml
 ```
 
+## Setup Ambassador
+
+* If you're running in a cluster with RBAC enabled:
+
+```
+> kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-rbac.yaml
+```
+
+* Without RBAC, you can use:
+
+```
+> kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-no-rbac.yaml
+```
+
 ## Build our own microservices
 
-- Build our microservices by running
+* Build our microservices by running
 
 ```
 > powershell -f build-all.ps1
 ```
 
-- Then if you want to just test it then run following commands
+* Then if you want to just test it then run following commands
 
 ```
 > cd k8s
 > kubectl apply -f shopping-cart.yaml
 ```
 
-- In reality, we need to inject the **sidecards** into microservices as following 
+* In reality, we need to inject the **sidecards** into microservices as following
 
 ```
 > cd k8s
 > istioctl kube-inject -f shopping-cart.yaml | kubectl apply -f -
 ```
+
+### Development a service
+
+* Build the whole application using
+
+```
+> powershell -f build-all.ps1
+```
+
+* Then run
+
+```
+> kubectl delete -f shopping-cart.yaml
+```
+
+* And
+
+```
+> kubectl apply -f shopping-cart.yaml
+```
+
+* Waiting a sec for Kubernetes to refresh.
 
 ### Dashboard
 
@@ -81,7 +123,7 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > minikube dashboard
 ```
 
-![](assets\minikube-ui.png)
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/minikube-ui.PNG)
 
 ```
 > kubectl get svc -n istio-system

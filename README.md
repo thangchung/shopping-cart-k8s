@@ -136,3 +136,19 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 ```
 > curl $GETWAY_URL
 ```
+
+* Get host IP
+
+```
+> minikube ip
+```
+
+* Get Ambassador port
+
+```
+> kubectl get svc ambassador -o jsonpath='{.spec.ports[0].nodePort}'
+```
+
+* Finally, open browser with `<IP>:<PORT>`
+
+* Currently, we have 2 group of routes `<IP>:<PORT>/c/swagger` and `<IP>:<PORT>/e/`

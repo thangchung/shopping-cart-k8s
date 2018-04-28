@@ -1,6 +1,6 @@
 # Shopping Cart Application with Microservices Approach
 
-Building microservices application (Shopping Cart Application) using Kubernetes + Istio with its ecosystem parts.
+Building microservices application (Shopping Cart Application - Polyglot for services) using Kubernetes + Istio with its ecosystem parts.
 
 > ### Disclamation
 >
@@ -8,7 +8,7 @@ Building microservices application (Shopping Cart Application) using Kubernetes 
 > * Should run powershell script to create `minikube` machine in `C:` drive.
 > * If it threw the exception that it couldn't find out `minikube` machine in Hyper-V so just simply delete everything in `<user>/.minikube` folder, but we could keep `cache` folder to avoid download everything from scratch, then runs it subsequently.
 
-## Prerequisites
+## Technical Stack
 
 * [Hyper-V](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview)
 * [Docker](https://www.docker.com)
@@ -91,7 +91,7 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 
 * Go to `http://localhost:4040`
 
-## Build our own microservices
+## Build Our Own microservices
 
 * Build our microservices by running
 
@@ -113,7 +113,7 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > istioctl kube-inject -f shopping-cart.yaml | kubectl apply -f -
 ```
 
-### Develop a service
+### Develop A New Service
 
 * Build the whole application using
 
@@ -169,7 +169,7 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 
 * Finally, open browser with `<IP>:<PORT>`
 
-### Microservices
+### Available Microservices
 
 * Catalog service: `<IP>:<PORT>/c/swagger`
 * Security service: `<IP>:<PORT>/id/account/login` or `<IP>:<PORT>/id/.well-known/openid-configuration`

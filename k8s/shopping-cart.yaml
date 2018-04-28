@@ -4,31 +4,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: catalogs
+  name: catalog
   labels:
-    app: catalogs
+    app: catalog
 spec:
   ports:
   - port: 80
     name: http
   selector:
-    app: catalogs
+    app: catalog
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: catalogs-v1
+  name: catalog-v1
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: catalogs
+        app: catalog
         version: v1
     spec:
       containers:
-      - name: catalogs
-        image: shopping-cart/catalogs:latest
+      - name: catalog
+        image: shopping-cart/catalog:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
@@ -125,9 +125,9 @@ metadata:
       ---
       apiVersion: ambassador/v0
       kind: Mapping
-      name: catalogs_mapping
+      name: catalog_mapping
       prefix: /c/
-      service: catalogs:80
+      service: catalog:80
       ---
       apiVersion: ambassador/v0
       kind: Mapping

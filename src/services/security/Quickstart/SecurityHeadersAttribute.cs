@@ -5,7 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace IdentityServer4.Quickstart.UI
+namespace CiK.Security.Quickstart
 {
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {

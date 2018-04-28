@@ -31,8 +31,8 @@ spec:
         image: shopping-cart/security:latest
         imagePullPolicy: IfNotPresent
         env:
-        - name: "ASPNETCORE_URLS"
-          value: "https://*:80/id/"
+        - name: "ASPNETCORE_BASEPATH"
+          value: "/id/"
         ports:
         - containerPort: 80
 ---
@@ -50,9 +50,9 @@ metadata:
       ---
       apiVersion: ambassador/v0
       kind: Mapping
-      name: catalogs_mapping
+      name: catalog_mapping
       prefix: /c/
-      service: catalogs:80
+      service: catalog:80
       ---
       apiVersion: ambassador/v0
       kind: Mapping

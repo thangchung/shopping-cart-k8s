@@ -19,9 +19,9 @@ Write-Output "Docker image version: $DOCKER_IMAGE_VERSION"
 Set-Location "."
 
 # catalog service
-$catalogImage = "shopping-cart/catalogs:$DOCKER_IMAGE_VERSION"
-$catalogImageLatest = "shopping-cart/catalogs:latest"
-$catalogDockerfile = "src/services/catalogs/Dockerfile"
+$catalogImage = "shopping-cart/catalog:$DOCKER_IMAGE_VERSION"
+$catalogImageLatest = "shopping-cart/catalog:latest"
+$catalogDockerfile = "src/services/catalog/Dockerfile"
 Write-Output "Removing $catalogImage..."
 docker rmi -f $catalogImage
 Write-Output "Removing $catalogImage..."

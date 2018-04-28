@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TestApp.Controllers {
+namespace CiK.Catalog.v1.Controllers {
   [Route ("api/v{api-version:apiVersion}/[controller]")]
   [ApiVersion ("1.0")]
   public class ValuesController : Controller {

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using IdentityServer4.Stores;
 
-namespace IdentityServer4.Quickstart.UI
+namespace CiK.Security.Quickstart
 {
     public static class Extensions
     {

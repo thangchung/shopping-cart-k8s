@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IdentityServer4.Quickstart.UI
+namespace CiK.Security.Quickstart.Account
 {
     public class LoginViewModel : LoginInputModel
     {

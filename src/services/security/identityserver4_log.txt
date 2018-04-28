@@ -1,0 +1,74 @@
+2018-04-28 12:45:12.361 +07:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2018-04-28 12:45:12.420 +07:00 [DBG] Using idsrv as default scheme for authentication
+2018-04-28 12:45:12.431 +07:00 [DBG] Using idsrv as default scheme for sign-in
+2018-04-28 12:45:12.434 +07:00 [DBG] Using idsrv as default scheme for sign-out
+2018-04-28 12:45:12.438 +07:00 [DBG] Using idsrv as default scheme for challenge
+2018-04-28 12:45:12.440 +07:00 [DBG] Using idsrv as default scheme for forbid
+2018-04-28 12:45:56.265 +07:00 [INF] AuthenticationScheme: idsrv was challenged.
+2018-04-28 12:46:03.904 +07:00 [DBG] CORS request made for path: /account/login from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2018-04-28 12:46:04.089 +07:00 [INF] {
+  "Name": "User Login Success",
+  "Category": "Authentication",
+  "EventType": "Success",
+  "Id": 1000,
+  "Username": "bob",
+  "SubjectId": "88421113",
+  "DisplayName": "bob",
+  "Endpoint": "UI",
+  "ActivityId": "0HLDCPD1PUN80:0000000B",
+  "TimeStamp": "2018-04-28T05:46:03Z",
+  "ProcessId": 748,
+  "LocalIpAddress": "::1:5000",
+  "RemoteIpAddress": "::1"
+}
+2018-04-28 12:46:04.173 +07:00 [DBG] Augmenting SignInContext
+2018-04-28 12:46:04.195 +07:00 [DBG] Adding idp claim with value: local
+2018-04-28 12:46:04.198 +07:00 [DBG] Adding amr claim with value: pwd
+2018-04-28 12:46:04.221 +07:00 [INF] AuthenticationScheme: idsrv signed in.
+2018-04-28 12:46:04.244 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:04.247 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:09.816 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:09.826 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:09.895 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:09.907 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:09.945 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:09.947 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:09.980 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:10.016 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:10.054 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:10.075 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:10.105 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:10.120 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:10.142 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:10.150 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:21.737 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:21.769 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.476 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.489 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.791 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.791 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.799 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.822 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.849 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.859 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.879 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.889 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.934 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:25.944 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:27.718 +07:00 [DBG] CORS request made for path: /Account/Logout from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2018-04-28 12:46:27.721 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:27.738 +07:00 [INF] AuthenticationScheme: idsrv was successfully authenticated.
+2018-04-28 12:46:27.878 +07:00 [INF] AuthenticationScheme: idsrv signed out.
+2018-04-28 12:46:27.905 +07:00 [INF] {
+  "Name": "User Logout Success",
+  "Category": "Authentication",
+  "EventType": "Success",
+  "Id": 1002,
+  "SubjectId": "88421113",
+  "DisplayName": "bob",
+  "ActivityId": "0HLDCPD1PUN80:00000013",
+  "TimeStamp": "2018-04-28T05:46:27Z",
+  "ProcessId": 748,
+  "LocalIpAddress": "::1:5000",
+  "RemoteIpAddress": "::1"
+}

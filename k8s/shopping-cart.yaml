@@ -34,6 +34,41 @@ spec:
         - containerPort: 80
 ---
 ##################################################################################################
+# Security service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: security
+  labels:
+    app: security
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: security
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: security-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: security
+        version: v1
+    spec:
+      containers:
+      - name: security
+        image: shopping-cart/security:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+##################################################################################################
 # Email service
 ##################################################################################################
 apiVersion: v1
@@ -46,9 +81,11 @@ spec:
   ports:
   - name: smtp
     port: 25
-    targetPort: smtp
+    targetPort: 1025
+    protocol: TCP
   - name: http
     port: 80
+    protocol: TCP
   selector:
     app: email-service
 ---
@@ -70,7 +107,9 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 25
+          protocol: TCP
         - containerPort: 80
+          protocol: TCP
 ---
 ##################################################################################################
 # Ambassador service
@@ -89,6 +128,12 @@ metadata:
       name: catalogs_mapping
       prefix: /c/
       service: catalogs:80
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: security_mapping
+      prefix: /id/
+      service: security:80
       ---
       apiVersion: ambassador/v0
       kind: Mapping

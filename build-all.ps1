@@ -27,4 +27,13 @@ docker rmi -f $catalogImage
 Write-Output "Removing $catalogImage..."
 docker build -f $catalogDockerfile -t $catalogImage -t $catalogImageLatest .
 
+# security service
+$securityImage = "shopping-cart/security:$DOCKER_IMAGE_VERSION"
+$securityImageLatest = "shopping-cart/security:latest"
+$securityDockerfile = "src/services/security/Dockerfile"
+Write-Output "Removing $securityImage..."
+docker rmi -f $securityImage
+Write-Output "Removing $securityImage..."
+docker build -f $securityDockerfile -t $securityImage -t $securityImageLatest .
+
 remove_dangling_images

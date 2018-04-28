@@ -1,0 +1,76 @@
+##################################################################################################
+# Security service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: security
+  labels:
+    app: security
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: security
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: security-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: security
+        version: v1
+    spec:
+      containers:
+      - name: security
+        image: shopping-cart/security:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: "ASPNETCORE_URLS"
+          value: "https://*:80/id/"
+        ports:
+        - containerPort: 80
+---
+##################################################################################################
+# Ambassador service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: ambassador
+  name: ambassador
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: catalogs_mapping
+      prefix: /c/
+      service: catalogs:80
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: security_mapping
+      prefix: /id/
+      service: security:80
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: email_mapping
+      prefix: /e/
+      service: email-service:80
+spec:
+  type: LoadBalancer
+  ports:
+  - name: ambassador
+    port: 80
+    targetPort: 80
+  selector:
+    service: ambassador
+---

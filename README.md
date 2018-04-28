@@ -15,6 +15,7 @@ Building microservices application (Shopping Cart Application) using Kubernetes 
 * [Kubernetes](https://kubernetes.io) ([minikube](https://github.com/kubernetes/minikube) v0.25.2 for windows)
 * [Istio](https://istio.io)
 * [Ambassador](https://www.getambassador.io)
+* [Weave Scope](https://www.weave.works) on Kubernetes
 * [.NET Core SDK](https://www.microsoft.com/net/download/windows)
 * [NodeJS](https://nodejs.org)
 
@@ -73,6 +74,23 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-no-rbac.yaml
 ```
 
+## Setup Weave Scope
+
+* Install and run it on the local
+
+```
+> kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=v1.9.0"
+```
+
+* Then `port-forward` it out as following
+
+```
+> kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}'
+> kubectl port-forward -n <weave scope name> 4040
+```
+
+* Go to `http://localhost:4040`
+
 ## Build our own microservices
 
 * Build our microservices by running
@@ -95,7 +113,7 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > istioctl kube-inject -f shopping-cart.yaml | kubectl apply -f -
 ```
 
-### Development a service
+### Develop a service
 
 * Build the whole application using
 
@@ -151,4 +169,20 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 
 * Finally, open browser with `<IP>:<PORT>`
 
-* Currently, we have 2 group of routes `<IP>:<PORT>/c/swagger` and `<IP>:<PORT>/e/`
+### Microservices
+
+* Catalog service: `<IP>:<PORT>/c/swagger`
+* Security service: `<IP>:<PORT>/id/account/login` or `<IP>:<PORT>/id/.well-known/openid-configuration`
+* Email service: `<IP>:<PORT>/e/`
+
+### Tips and Tricks
+
+* Print out environment variables in one container
+
+```
+> kubectl get pods
+```
+
+```
+> kubectl exec <pod name> env
+```

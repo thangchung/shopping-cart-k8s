@@ -4,20 +4,38 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace TestApp.Controllers {
 
   [ApiVersion ("1.0")]
   [Route ("api/v{api-version:apiVersion}/[controller]")]
   public class EmailController : Controller {
+    private readonly ILogger _logger;
+    public EmailController (ILogger<EmailController> logger) {
+      _logger = logger;
+    }
 
     [HttpPost ("")]
-    [ProducesResponseType (typeof (bool), 200)]
+    [ProducesResponseType (typeof (string), 200)]
     [ProducesResponseType (404)]
-    public bool Post (string subject, string body) {
+    public string Post (string subject, string body) {
+      var host = Environment.GetEnvironmentVariable ("EMAIL_SERVICE_SERVICE_HOST");
+      _logger.LogInformation ($"Email: Get HOST from EMAIL_SERVICE_SERVICE_HOST: {host}");
+
+      var port = Environment.GetEnvironmentVariable ("EMAIL_SERVICE_SERVICE_PORT_SMTP");
+      _logger.LogInformation ($"Email: Get PORT from EMAIL_SERVICE_SERVICE_PORT_SMTP: {port}");
+
+      // TODO: hard code here
+      port = "1025";
+
       try {
-        var client = new SmtpClient ("smtp://email-service:25");
+        var client = new SmtpClient ();
+
+        client.Host = host;
+        client.Port = Convert.ToInt32 (port);
         client.UseDefaultCredentials = false;
         client.Credentials = new NetworkCredential ("username", "password");
 
@@ -26,12 +44,14 @@ namespace TestApp.Controllers {
         mailMessage.To.Add ("thangchung@ymail.com");
         mailMessage.Body = body;
         mailMessage.Subject = subject;
+
         client.Send (mailMessage);
+        _logger.LogInformation ("Email: Finished.");
       } catch (System.Exception) {
         // might have runtime exception here
       }
 
-      return true;
+      return $"{host}:{port}";
     }
 
   }

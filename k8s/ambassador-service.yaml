@@ -1,0 +1,44 @@
+##################################################################################################
+# Ambassador service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: ambassador
+  name: ambassador
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: catalog_mapping
+      prefix: /c/
+      service: catalog:80
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: supplier_mapping
+      prefix: /s/
+      service: supplier:3000
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: security_mapping
+      prefix: /id/
+      service: security:80
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: email_mapping
+      prefix: /e/
+      service: email-service:80
+spec:
+  type: LoadBalancer
+  ports:
+  - name: ambassador
+    port: 80
+    targetPort: 80
+  selector:
+    service: ambassador
+---

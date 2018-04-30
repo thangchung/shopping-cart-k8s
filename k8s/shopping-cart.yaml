@@ -34,6 +34,41 @@ spec:
         - containerPort: 80
 ---
 ##################################################################################################
+# Supplier service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: supplier
+  labels:
+    app: supplier
+spec:
+  ports:
+  - port: 3000
+    name: http
+  selector:
+    app: supplier
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: supplier-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: supplier
+        version: v1
+    spec:
+      containers:
+      - name: supplier
+        image: shopping-cart/supplier:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+---
+##################################################################################################
 # Security service
 ##################################################################################################
 apiVersion: v1

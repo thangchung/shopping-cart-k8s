@@ -162,6 +162,7 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 
 * Microservices
   * Catalog service: `www.<IP>.xip.io:<PORT>/c/swagger/`. For example, http://www.192.168.1.6.xip.io:32097/c/swagger/
+  * Supplier service: `www.<IP>.xip.io:<PORT>/s/`
   * Security service: `www.<IP>.xip.io:<PORT>/id/account/login` or `www.<IP>.xip.io:<PORT>/id/.well-known/openid-configuration`
   * Email service: `www.<IP>.xip.io:<PORT>/e/`
 

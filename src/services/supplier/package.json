@@ -1,0 +1,24 @@
+{
+  "name": "supplier-service",
+  "version": "0.0.1",
+  "description": "supplier service",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thangchung/shopping-cart-k8s.git"
+  },
+  "author": "thangchung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thangchung/shopping-cart-k8s/issues"
+  },
+  "homepage": "https://github.com/thangchung/shopping-cart-k8s#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "npm": "^6.0.0"
+  }
+}

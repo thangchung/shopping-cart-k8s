@@ -27,6 +27,14 @@ docker rmi -f $catalogImage
 Write-Output "Removing $catalogImage..."
 docker build -f $catalogDockerfile -t $catalogImage -t $catalogImageLatest .
 
+# supplier service
+$supplierImage = "shopping-cart/supplier:$DOCKER_IMAGE_VERSION"
+$supplierImageLatest = "shopping-cart/supplier:latest"
+$supplierDockerfile = "src/services/supplier/Dockerfile"
+Write-Output "Removing $supplierImage..."
+docker rmi -f $supplierImage
+docker build -f $supplierDockerfile -t $supplierImage -t $supplierImageLatest --build-arg service_version=$DOCKER_IMAGE_VERSION .
+
 # security service
 $securityImage = "shopping-cart/security:$DOCKER_IMAGE_VERSION"
 $securityImageLatest = "shopping-cart/security:latest"

@@ -65,6 +65,9 @@ spec:
       - name: security
         image: shopping-cart/security:latest
         imagePullPolicy: IfNotPresent
+        env:
+        - name: "ASPNETCORE_BASEPATH"
+          value: "/id/"
         ports:
         - containerPort: 80
 ---

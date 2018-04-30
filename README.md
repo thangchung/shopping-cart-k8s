@@ -10,7 +10,7 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 
 ## Technical Stack
 
-* [Hyper-V](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview)
+* [Hyper-V](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview) or [VirtualBox](https://www.virtualbox.org)
 * [Docker](https://www.docker.com)
 * [Kubernetes](https://kubernetes.io) ([minikube](https://github.com/kubernetes/minikube) v0.25.2 for windows)
 * [Istio](https://istio.io)
@@ -21,16 +21,30 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 
 ## Setup Local Kubernetes
 
-* Using minikube for Windows in this project, but you can use Mac or Linux version as well
+* Using `minikube` for `Windows` in this project, but you can use `Mac` or `Linux` version as well
 
-* Download the appropriate package of your minikube at https://github.com/kubernetes/minikube/releases (We use `v0.25.2` in this project)
+* Download the appropriate package of your minikube at https://github.com/kubernetes/minikube/releases (We use `v0.26.1` in this project)
 
 * Install it into your machine (Windows 10 in this case)
 
 * After installed `minikube`, then run
 
+`Hyper-V`
+
 ```
-> minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
+> minikube start --kubernetes-version="v1.9.0" --vm-driver=hyperv --hyperv-virtual-switch="minikube_switch" --cpus=4 --memory=4096 --v=999 --alsologtostderr
+```
+
+or starting with full option
+
+```
+> minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --cpus=4 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
+```
+
+`VirtualBox v5.2.8`
+
+```
+> minikube start --vm-driver="virtualbox" --kubernetes-version="v1.10.0" --cpus=4 --memory 4096 --extra-config=apiserver.authorization-mode=RBAC,apiserver.Features.EnableSwaggerUI=true,apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
 ```
 
 ## Setup Istio
@@ -39,26 +53,17 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 
 * Upzip it into your disk, let say `D:\istio\`
 
-* Run
-
-```
-> minikube docker-env
-```
-
-* Copy and Run
-
-```
-> @FOR /f "tokens=*" %i IN ('minikube docker-env') DO @%i
-```
-
-From now on, we can type `docker images` to list out all images in Kubernetes local node.
-
 * `cd` into `D:\istio\`, then run
 
 ```
-> kubectl apply -f install/kubernetes/istio.yaml
-> kubectl apply -f install/kubernetes/istio-auth.yaml
+> kubectl create -f install/kubernetes/istio.yaml
+
+or
+
+> kubectl create -f install/kubernetes/istio-auth.yaml
 ```
+
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/default-istio-images.png)
 
 ## Setup Ambassador
 
@@ -74,24 +79,23 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-no-rbac.yaml
 ```
 
-## Setup Weave Scope
-
-* Install and run it on the local
-
-```
-> kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=v1.9.0"
-```
-
-* Then `port-forward` it out as following
-
-```
-> kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}'
-> kubectl port-forward -n <weave scope name> 4040
-```
-
-* Go to `http://localhost:4040`
+**Notes: for some reason, I could run the no-rbac mode on my local development.**
 
 ## Build Our Own microservices
+
+* Run
+
+```
+> minikube docker-env
+```
+
+* Copy and Run
+
+```
+> @FOR /f "tokens=*" %i IN ('minikube docker-env') DO @%i
+```
+
+From now on, we can type `docker images` to list out all images in Kubernetes local node.
 
 * Build our microservices by running
 
@@ -112,6 +116,8 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > cd k8s
 > istioctl kube-inject -f shopping-cart.yaml | kubectl apply -f -
 ```
+
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/shopping-cart-images.png)
 
 ### Develop A New Service
 
@@ -174,6 +180,41 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 * Catalog service: `<IP>:<PORT>/c/swagger`
 * Security service: `<IP>:<PORT>/id/account/login` or `<IP>:<PORT>/id/.well-known/openid-configuration`
 * Email service: `<IP>:<PORT>/e/`
+
+## Metrics Collection, Distributed Tracing, and Visualization
+
+### Setup Prometheus
+
+TODO
+
+### Setup Grafana
+
+TODO
+
+### Setup Service Graph
+
+TODO
+
+### Setup Zipkin or Jaeger
+
+TODO
+
+### Setup Weave Scope
+
+* Install and run it on the local
+
+```
+> kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=v1.9.0"
+```
+
+* Then `port-forward` it out as following
+
+```
+> kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}'
+> kubectl port-forward -n <weave scope name> 4040
+```
+
+* Go to `http://localhost:4040`
 
 ### Tips and Tricks
 

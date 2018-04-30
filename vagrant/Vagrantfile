@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$script = <<-SCRIPT
+
+  apt-get update
+  # Install Docker (made slightly more complex by the need to use specific Docker package repos)
+  apt-get install -y apt-transport-https ca-certificates
+  apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+  echo deb https://apt.dockerproject.org/repo ubuntu-xenial main >> /etc/apt/sources.list.d/docker.list
+  apt-get update
+  apt-get purge lxc-docker
+  apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual
+  apt-get install -y docker-engine
+  printf "*********************************"
+  
+  # Install Docker Compose
+  curl -s -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
+
+  # Install Kubernetes
+  apt-get update && apt-get install -y apt-transport-https
+  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+  deb http://apt.kubernetes.io/ kubernetes-xenial main
+  EOF
+  apt-get update
+  apt-get install -y kubelet kubeadm kubectl
+  # kubelet requires swap off
+  swapoff -a
+  # This adds the line twice, but the second time doesn't matter
+  sed '/ExecStart=/a Environment="KUBELET_EXTRA_ARGS=--cgroup-driver=cgroupfs"' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+  # Get the IP address that VirtualBox has given this VM
+  IPADDR=`ifconfig enp0s8 | grep Mask | awk '{print $2}'| cut -f2 -d:`
+  echo This VM has IP address $IPADDR
+  # Set up Kubernetes
+  kubeadm init --apiserver-cert-extra-sans=$IPADDR  --node-name vagrant
+  # Set up admin creds for the vagrant user
+  echo Copying credentials to /home/vagrant...
+  sudo --user=vagrant mkdir -p /home/vagrant/.kube
+  cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+  chown $(id -u vagrant):$(id -g vagrant) /home/vagrant/.kube/config
+  
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "geerlingguy/ubuntu1604"
+  config.vm.network "private_network", type: "dhcp"
+  config.vm.provision "docker"
+  config.vm.provision "shell", inline: $script
+
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 8192
+  end
+end

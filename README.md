@@ -18,6 +18,9 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 * [Weave Scope](https://www.weave.works) on Kubernetes
 * [.NET Core SDK](https://www.microsoft.com/net/download/windows)
 * [NodeJS](https://nodejs.org)
+* [xip](http://xip.io) or [nip](http://nip.io) for access virtual
+  hosts on your development web server from devices on your
+  local network, like iPads, iPhones, and other computers.
 
 ## Setup Local Kubernetes
 
@@ -81,7 +84,7 @@ or
 > kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-no-rbac.yaml
 ```
 
-**_Notes: for some reason, I could run the no-rbac mode on my local development._**
+**_Notes: for some reason, I couldn't run the no-rbac mode on my local development._**
 
 ## Dashboard
 
@@ -157,11 +160,10 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 
 * Finally, open browser with `<IP>:<PORT>`
 
-### Catalog service: `www.<IP>.xip.io:<PORT>/c/swagger/`. For example, http://www.192.168.1.6.xip.io:32097/c/swagger/
-
-### Security service: `www.<IP>.xip.io:<PORT>/id/account/login` or `www.<IP>.xip.io:<PORT>/id/.well-known/openid-configuration`
-
-### Email service: `www.<IP>.xip.io:<PORT>/e/`
+* Microservices
+  * Catalog service: `www.<IP>.xip.io:<PORT>/c/swagger/`. For example, http://www.192.168.1.6.xip.io:32097/c/swagger/
+  * Security service: `www.<IP>.xip.io:<PORT>/id/account/login` or `www.<IP>.xip.io:<PORT>/id/.well-known/openid-configuration`
+  * Email service: `www.<IP>.xip.io:<PORT>/e/`
 
 ## Develop A New Service
 

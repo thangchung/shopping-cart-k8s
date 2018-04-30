@@ -81,7 +81,27 @@ or
 > kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-no-rbac.yaml
 ```
 
-**Notes: for some reason, I could run the no-rbac mode on my local development.**
+**_Notes: for some reason, I could run the no-rbac mode on my local development._**
+
+## Dashboard
+
+```
+> minikube dashboard
+```
+
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/minikube-ui.PNG)
+
+```
+> kubectl get svc -n istio-system
+```
+
+```
+> export GATEWAY_URL=$(kubectl get po -l istio-ingress -n istio-system -o jsonpath='{.items[0].status.hostIP}'):$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')
+```
+
+```
+> curl $GETWAY_URL
+```
 
 ## Build Our Own microservices
 
@@ -121,7 +141,29 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 
 ![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/shopping-cart-images.PNG)
 
-### Develop A New Service
+## Available Microservices
+
+* Get host IP
+
+```
+> minikube ip
+```
+
+* Get Ambassador port
+
+```
+> kubectl get svc ambassador -o jsonpath='{.spec.ports[0].nodePort}'
+```
+
+* Finally, open browser with `<IP>:<PORT>`
+
+### Catalog service: `www.<IP>.xip.io:<PORT>/c/swagger/`. For example, http://www.192.168.1.6.xip.io:32097/c/swagger/
+
+### Security service: `www.<IP>.xip.io:<PORT>/id/account/login` or `www.<IP>.xip.io:<PORT>/id/.well-known/openid-configuration`
+
+### Email service: `www.<IP>.xip.io:<PORT>/e/`
+
+## Develop A New Service
 
 * Build the whole application using
 
@@ -142,46 +184,6 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 ```
 
 * Waiting a sec for Kubernetes to refresh.
-
-### Dashboard
-
-```
-> minikube dashboard
-```
-
-![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/minikube-ui.PNG)
-
-```
-> kubectl get svc -n istio-system
-```
-
-```
-> export GATEWAY_URL=$(kubectl get po -l istio-ingress -n istio-system -o jsonpath='{.items[0].status.hostIP}'):$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')
-```
-
-```
-> curl $GETWAY_URL
-```
-
-* Get host IP
-
-```
-> minikube ip
-```
-
-* Get Ambassador port
-
-```
-> kubectl get svc ambassador -o jsonpath='{.spec.ports[0].nodePort}'
-```
-
-* Finally, open browser with `<IP>:<PORT>`
-
-### Available Microservices
-
-* Catalog service: `<IP>:<PORT>/c/swagger`
-* Security service: `<IP>:<PORT>/id/account/login` or `<IP>:<PORT>/id/.well-known/openid-configuration`
-* Email service: `<IP>:<PORT>/e/`
 
 ## Metrics Collection, Distributed Tracing, and Visualization
 

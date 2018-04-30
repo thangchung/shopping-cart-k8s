@@ -23,7 +23,7 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 
 * Using `minikube` for `Windows` in this project, but you can use `Mac` or `Linux` version as well
 
-* Download the appropriate package of your minikube at https://github.com/kubernetes/minikube/releases (We use `v0.26.1` in this project)
+* Download the appropriate package of your minikube at https://github.com/kubernetes/minikube/releases (Used `v0.25.2` for this project)
 
 * Install it into your machine (Windows 10 in this case)
 
@@ -38,7 +38,7 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 or starting with full option
 
 ```
-> minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --cpus=4 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=7 --alsologtostderr
+> minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --cpus=4 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=999 --alsologtostderr
 ```
 
 `VirtualBox v5.2.8`
@@ -63,7 +63,9 @@ or
 > kubectl create -f install/kubernetes/istio-auth.yaml
 ```
 
-![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/default-istio-images.png)
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/default-istio-images.PNG)
+
+**_Notes: set `istio\bin\istioctl.exe` to the `PATH` of the windows._**
 
 ## Setup Ambassador
 
@@ -117,7 +119,7 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > istioctl kube-inject -f shopping-cart.yaml | kubectl apply -f -
 ```
 
-![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/shopping-cart-images.png)
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/shopping-cart-images.PNG)
 
 ### Develop A New Service
 

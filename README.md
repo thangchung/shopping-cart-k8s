@@ -38,10 +38,10 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 > minikube start --kubernetes-version="v1.9.0" --vm-driver=hyperv --hyperv-virtual-switch="minikube_switch" --cpus=4 --memory=4096 --v=999 --alsologtostderr
 ```
 
-or starting with full option
+Then start with full option
 
 ```
-> minikube start --vm-driver hyperv --kubernetes-version="v1.9.0" --hyperv-virtual-switch="minikube_switch" --memory 4096 --cpus=4 --extra-config=apiserver.authorization-mode=RBAC --extra-config=apiserver.Features.EnableSwaggerUI=true -extra-config=apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=999 --alsologtostderr
+> minikube start --extra-config=apiserver.Features.EnableSwaggerUI=true,apiserver.Authorization.Mode=RBAC,apiserver.Admission.PluginNames=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --v=999 --alsologtostderr
 ```
 
 `VirtualBox v5.2.8`
@@ -246,6 +246,26 @@ TODO
 ```
 
 * Go to `http://localhost:4040`
+
+### Helm
+
+* Download Helm
+
+```
+> cd <git repo>
+> helm init
+> helm repo update
+> kubectl --namespace=kube-system edit deployment/tiller-deploy
+```
+
+Changed `automountServiceAccountToken` to `true`.
+
+```
+> kubectl --namespace=kube-system create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
+```
+
+Reference to [how to install Helm](https://gist.github.com/ssudake21/e60d917ede9c0198f1ae56b07a10dd9a)
+Issue when [cannot access to 127.0.0.1](https://github.com/kubernetes/helm/issues/2464)
 
 ### Tips and Tricks
 

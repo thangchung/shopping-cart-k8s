@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CiK.Fw.Infrastructure.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,16 +23,9 @@ namespace CiK.Catalog.v1.Controllers
     {
       _rest.SetOpenTracingInfo(HttpContext.Request.GetOpenTracingInfo());
 
-      var serviceName = "localhost";
-      var port = 3000;
+      var serviceUrl = _env.IsDevelopment() ? "http://localhost:3000/" : "http://supplier:3000/";
 
-      if (!_env.IsDevelopment())
-      {
-        serviceName = "supplier";
-        port = 3000;
-      }
-
-      var result = await _rest.GetAsync<List<SupplierModel>>(serviceName, port, "");
+      var result = await _rest.GetAsync<List<SupplierModel>>(serviceUrl);
       return result;
     }
   }

@@ -10,7 +10,7 @@ function remove_dangling_images() {
 }
 
 # variables
-$GITSHA1 = git rev-parse HEAD
+$GITSHA1 = git rev-parse --short HEAD
 $DOCKER_IMAGE_VERSION = $GITSHA1
 
 Write-Output "Docker image version: $DOCKER_IMAGE_VERSION"
@@ -24,7 +24,6 @@ $catalogImageLatest = "shopping-cart/catalog:latest"
 $catalogDockerfile = "src/services/catalog/Dockerfile"
 Write-Output "Removing $catalogImage..."
 docker rmi -f $catalogImage
-Write-Output "Removing $catalogImage..."
 docker build -f $catalogDockerfile -t $catalogImage -t $catalogImageLatest .
 
 # supplier service
@@ -41,7 +40,6 @@ $securityImageLatest = "shopping-cart/security:latest"
 $securityDockerfile = "src/services/security/Dockerfile"
 Write-Output "Removing $securityImage..."
 docker rmi -f $securityImage
-Write-Output "Removing $securityImage..."
 docker build -f $securityDockerfile -t $securityImage -t $securityImageLatest .
 
 remove_dangling_images

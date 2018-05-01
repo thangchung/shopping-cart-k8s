@@ -1,0 +1,35 @@
+##################################################################################################
+# Catalog service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  labels:
+    app: catalog
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: catalog
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: catalog-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: catalog
+        version: v1
+    spec:
+      containers:
+      - name: catalog
+        image: shopping-cart/catalog:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---

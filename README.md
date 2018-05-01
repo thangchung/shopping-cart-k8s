@@ -106,7 +106,7 @@ or
 > curl $GETWAY_URL
 ```
 
-## Build Our Own microservices
+## Build Our Own Microservices
 
 * Run
 
@@ -135,6 +135,8 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > kubectl apply -f shopping-cart.yaml
 ```
 
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/shopping-cart-images.PNG)
+
 * In reality, we need to inject the **sidecards** into microservices as following
 
 ```
@@ -142,7 +144,13 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 > istioctl kube-inject -f shopping-cart.yaml | kubectl apply -f -
 ```
 
-![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/shopping-cart-images.PNG)
+* In `Deployment`
+
+  ![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/istio-injected-with-sidecar.PNG)
+
+* In each `Pod`
+
+  ![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/istio-injected-with-sidecar-pods.PNG)
 
 ## Available Microservices
 
@@ -192,11 +200,27 @@ From now on, we can type `docker images` to list out all images in Kubernetes lo
 
 ### Setup Prometheus
 
-TODO
+```
+> cd istio\install\kubernetes\addons\
+> kubectl apply -f prometheus.yaml
+```
 
 ### Setup Grafana
 
-TODO
+```
+> cd istio\install\kubernetes\addons\
+> kubectl apply -f grafana.yaml
+```
+
+```
+> kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+```
+
+```
+> curl http://localhost:3000
+```
+
+![](https://github.com/thangchung/shopping-cart-k8s/blob/master/assets/grafana-ui.PNG)
 
 ### Setup Service Graph
 

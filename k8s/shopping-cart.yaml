@@ -169,6 +169,12 @@ metadata:
       ---
       apiVersion: ambassador/v0
       kind: Mapping
+      name: supplier_mapping
+      prefix: /s/
+      service: supplier:3000
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
       name: security_mapping
       prefix: /id/
       service: security:80

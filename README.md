@@ -15,9 +15,11 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 * [Kubernetes](https://kubernetes.io) ([minikube](https://github.com/kubernetes/minikube) v0.25.2 for windows)
 * [Istio](https://istio.io)
 * [Ambassador](https://www.getambassador.io)
+* [Helm](https://helm.sh)
 * [Weave Scope](https://www.weave.works) on Kubernetes
 * [.NET Core SDK](https://www.microsoft.com/net/download/windows)
 * [NodeJS](https://nodejs.org)
+* Windows Powershell
 * [xip](http://xip.io) or [nip](http://nip.io) for access virtual
   hosts on your development web server from devices on your
   local network, like iPads, iPhones, and other computers.
@@ -105,6 +107,55 @@ or
 ```
 > curl $GETWAY_URL
 ```
+
+## Install and Work with Helm (Kubernetes Package Manager)
+
+```
+> choco install kubernetes-helm
+```
+
+```
+> cd <git repo>
+> helm init
+> helm repo update
+> helm version
+```
+
+* Install RabbitMq
+
+```
+> helm install --name my-rabbitmq --set rbacEnabled=false stable/rabbitmq
+```
+
+Now we can use `amqp://my-rabbitmq.default.svc.cluster.local:5672` on Kubernetes Cluster, but what if we want to leverage it for the local development. The solution is `port-forward` it to our localhost as
+
+```
+> kubectl get pods | grep rabbitmq | awk '{print $1;}'
+> kubectl port-forward <pod name just got> 15672
+```
+
+Or port-forward 5672 on Kubernetes (amqp protocol) to localhost:5672
+
+```
+> kubectl port-forward <pod name just got> 1234:5672
+```
+
+Now we have
+
+```
+> amqp://127.0.0.1:1234
+```
+
+* Install Redis
+
+```
+> helm install --name my-redis stable/redis
+```
+
+* References:
+  * [Stable Helm Template](https://github.com/kubernetes/charts/blob/master/stable)
+  * [How to install Helm](https://gist.github.com/ssudake21/e60d917ede9c0198f1ae56b07a10dd9a)
+  * Issue: [cannot access to 127.0.0.1](https://github.com/kubernetes/helm/issues/2464)
 
 ## Build Our Own Microservices
 
@@ -247,26 +298,6 @@ TODO
 
 * Go to `http://localhost:4040`
 
-### Helm
-
-* Download Helm
-
-```
-> cd <git repo>
-> helm init
-> helm repo update
-> kubectl --namespace=kube-system edit deployment/tiller-deploy
-```
-
-Changed `automountServiceAccountToken` to `true`.
-
-```
-> kubectl --namespace=kube-system create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
-```
-
-Reference to [how to install Helm](https://gist.github.com/ssudake21/e60d917ede9c0198f1ae56b07a10dd9a)
-Issue when [cannot access to 127.0.0.1](https://github.com/kubernetes/helm/issues/2464)
-
 ### Tips and Tricks
 
 * Print out environment variables in one container
@@ -277,4 +308,18 @@ Issue when [cannot access to 127.0.0.1](https://github.com/kubernetes/helm/issue
 
 ```
 > kubectl exec <pod name> env
+```
+
+* Switch to another use-context
+
+Let say we have a profile named `minikube19`, then just typing the command as below
+
+```
+> kubectl config use-context minikube19
+
+Switched to context "minikube19".
+```
+
+```
+> minikube config set profile minikube19
 ```

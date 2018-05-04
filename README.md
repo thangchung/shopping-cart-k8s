@@ -8,6 +8,19 @@ Building microservices application (Shopping Cart Application - Polyglot for ser
 > * Should run powershell script to create `minikube` machine in `C:` drive.
 > * If it threw the exception that it couldn't find out `minikube` machine in Hyper-V so just simply delete everything in `<user>/.minikube` folder, but we could keep `cache` folder to avoid download everything from scratch, then runs it subsequently.
 
+## Table of contents
+
+* [Technical Stack](https://github.com/thangchung/shopping-cart-k8s#technical-stack)
+* [Setup Local Kubernetes](https://github.com/thangchung/shopping-cart-k8s#setup-local-kubernetes)
+* [Setup Istio](https://github.com/thangchung/shopping-cart-k8s#setup-istio)
+* [Setup Ambassador](https://github.com/thangchung/shopping-cart-k8s#setup-ambassador)
+* [Install and Work with Helm](https://github.com/thangchung/shopping-cart-k8s#install-and-work-with-helm-kubernetes-package-manager)
+* [Build Our Own Microservices](https://github.com/thangchung/shopping-cart-k8s#build-our-own-microservices)
+* [Available Microservices](https://github.com/thangchung/shopping-cart-k8s#available-microservices)
+* [Develop A New Service](https://github.com/thangchung/shopping-cart-k8s#develop-a-new-service)
+* [Metrics Collection, Distributed Tracing, and Visualization](https://github.com/thangchung/shopping-cart-k8s#metrics-collection-distributed-tracing-and-visualization)
+* [Tips and Tricks](https://github.com/thangchung/shopping-cart-k8s#tips-and-tricks)
+
 ## Technical Stack
 
 * [Hyper-V](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview) or [VirtualBox](https://www.virtualbox.org)
@@ -143,7 +156,7 @@ Or port-forward 5672 on Kubernetes (amqp protocol) to localhost:5672
 Now we have
 
 ```
-> amqp://127.0.0.1:1234
+> amqp://root:letmein@127.0.0.1:1234
 ```
 
 * Install Redis

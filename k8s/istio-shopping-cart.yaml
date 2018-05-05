@@ -1,0 +1,151 @@
+##################################################################################################
+# Catalog service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  labels:
+    app: catalog
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: catalog
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: catalog-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: catalog
+        version: v1
+    spec:
+      containers:
+      - name: catalog
+        image: shopping-cart/catalog:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+##################################################################################################
+# Supplier service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: supplier
+  labels:
+    app: supplier
+spec:
+  ports:
+  - port: 3000
+    name: http
+  selector:
+    app: supplier
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: supplier-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: supplier
+        version: v1
+    spec:
+      containers:
+      - name: supplier
+        image: shopping-cart/supplier:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+---
+##################################################################################################
+# Security service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: security
+  labels:
+    app: security
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: security
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: security-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: security
+        version: v1
+    spec:
+      containers:
+      - name: security
+        image: shopping-cart/security:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: "ASPNETCORE_BASEPATH"
+          value: "/id/"
+        ports:
+        - containerPort: 80
+---
+##################################################################################################
+# Email service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-service
+  labels:
+    app: email-service
+spec:
+  ports:
+  - name: smtp
+    port: 25
+    targetPort: 1025
+    protocol: TCP
+  - name: http
+    port: 80
+    protocol: TCP
+  selector:
+    app: email-service
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: email-service-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: email-service
+        version: v1
+    spec:
+      containers:
+      - name: email-service
+        image: djfarrelly/maildev:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 25
+          protocol: TCP
+        - containerPort: 80
+          protocol: TCP
+---

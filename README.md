@@ -99,6 +99,14 @@ or
 > kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-no-rbac.yaml
 ```
 
+* If you're going to **use Ambassador**, then run as following script
+
+```
+> cd k8s
+> istioctl kube-inject -f istio-shopping-cart.yaml | kubectl apply -f -
+> kubectl apply -f ambassador-service.yaml
+```
+
 **_Notes: for some reason, I couldn't run the no-rbac mode on my local development._**
 
 ## Dashboard
@@ -325,7 +333,7 @@ TODO
 
 * Switch to another use-context
 
-Let say we have a profile named `minikube19`, then just typing the command as below
+Let say we have a profile named `minikube19`, then just type the command as below
 
 ```
 > kubectl config use-context minikube19

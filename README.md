@@ -349,8 +349,25 @@ Switched to context "minikube19".
 - Install Ubuntu Server VM (ubuntu-18.04-live-server-amd64.iso) on Hyper-V (External Network)
 - `ssh` into that machine, then `sudo apt-get install docker.io`
 - [Install Virtual Box (5.2) on Ubuntu VM](https://websiteforstudents.com/virtualbox-5-2-on-ubuntu-16-04-lts-server-headless)
-- Install `kubectl`
-- Install `minikube`, then run following script
+- [Install `kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+```
+> apt-get update && apt-get install -y apt-transport-https
+> curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+> cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+> apt-get update
+> apt-get install -y kubectl
+```
+
+- Install `minikube`
+
+```
+> curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.27.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+```
+
+- Then run following script
 
 ```
 > minikube start --vm-driver="virtualbox" --kubernetes-version="v1.9.0" --cpus=4 --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --v=7 --alsologtostderr

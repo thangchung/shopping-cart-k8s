@@ -344,3 +344,34 @@ Switched to context "minikube19".
 ```
 > minikube config set profile minikube19
 ```
+
+## Working with Ubuntu on Hyper-V
+- Install Ubuntu Server VM (ubuntu-18.04-live-server-amd64.iso) on Hyper-V (External Network)
+- `ssh` into that machine, then `sudo apt-get install docker.io`
+- [Install Virtual Box (5.2) on Ubuntu VM](https://websiteforstudents.com/virtualbox-5-2-on-ubuntu-16-04-lts-server-headless)
+- Install `kubectl`
+- Install `minikube`, then run following script
+
+```
+> minikube start --vm-driver="virtualbox" --kubernetes-version="v1.9.0" --cpus=4 --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --v=7 --alsologtostderr
+```
+
+- Make Hyper-V treats well with Ubuntu by [enable nested vitualization](https://www.petri.com/enable-nested-hyper-v-virtualization-windows-10-build-10565), before of that we need to make [Powershell run well](http://tritoneco.com/2014/02/21/fix-for-powershell-script-not-digitally-signed/)
+- [Make the internal Kubernetes Dashboard can be accessed by outside](https://www.debuntu.org/how-to-redirecting-network-traffic-to-a-new-ip-using-iptables/)
+
+```
+> sysctl net.ipv4.ip_forward=1
+> iptables -t nat -A PREROUTING -p tcp -d <VM IP> --dport 30000 -j DNAT --to-destination 192.168.99.100:30000
+> iptables -t nat -A POSTROUTING -j MASQUERADE
+```
+
+- [Install `samba` on ubuntu VM](https://tutorials.ubuntu.com/tutorial/install-and-configure-samba)
+- Open ubuntu VM port (if needed)
+
+```
+> sudo iptables -I INPUT -p tcp --dport 2375 -j ACCEPT
+or
+> sudo ufw allow 2375
+then
+> nc -l 2375
+```

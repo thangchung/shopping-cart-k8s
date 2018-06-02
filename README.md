@@ -390,6 +390,11 @@ EOF
 > iptables -t nat -A POSTROUTING -j MASQUERADE
 ```
 
+```
+> sudo iptables -t nat -v -x -n -L
+> sudo dhclient eth0 -v
+```
+
 * [Install `samba` on ubuntu VM](https://tutorials.ubuntu.com/tutorial/install-and-configure-samba)
 
 * `socat` on Ubuntu Server

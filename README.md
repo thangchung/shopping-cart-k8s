@@ -346,10 +346,11 @@ Switched to context "minikube19".
 ```
 
 ## Working with Ubuntu on Hyper-V
-- Install Ubuntu Server VM (ubuntu-18.04-live-server-amd64.iso) on Hyper-V (External Network)
-- `ssh` into that machine, then `sudo apt-get install docker.io`
-- [Install Virtual Box (5.2) on Ubuntu VM](https://websiteforstudents.com/virtualbox-5-2-on-ubuntu-16-04-lts-server-headless)
-- [Install `kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+* Install Ubuntu Server VM (ubuntu-18.04-live-server-amd64.iso) on Hyper-V (External Network)
+* `ssh` into that machine, then `sudo apt-get install docker.io`
+* [Install Virtual Box (5.2) on Ubuntu VM](https://websiteforstudents.com/virtualbox-5-2-on-ubuntu-16-04-lts-server-headless)
+* [Install `kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 ```
 > apt-get update && apt-get install -y apt-transport-https
@@ -361,20 +362,27 @@ EOF
 > apt-get install -y kubectl
 ```
 
-- Install `minikube`
+* Install `minikube`
 
 ```
 > curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.27.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 ```
 
-- Then run following script
+* Alias command
+
+```
+> alias k='kubectl'
+> alias mk='/usr/local/bin/minikube'
+```
+
+* Then run following script
 
 ```
 > minikube start --vm-driver="virtualbox" --kubernetes-version="v1.9.0" --cpus=4 --memory 4096 --extra-config=apiserver.authorization-mode=RBAC --v=7 --alsologtostderr
 ```
 
-- Make Hyper-V treats well with Ubuntu by [enable nested vitualization](https://www.petri.com/enable-nested-hyper-v-virtualization-windows-10-build-10565), before of that we need to make [Powershell run well](http://tritoneco.com/2014/02/21/fix-for-powershell-script-not-digitally-signed/)
-- [Make the internal Kubernetes Dashboard can be accessed by outside](https://www.debuntu.org/how-to-redirecting-network-traffic-to-a-new-ip-using-iptables/)
+* Make Hyper-V treats well with Ubuntu by [enable nested vitualization](https://www.petri.com/enable-nested-hyper-v-virtualization-windows-10-build-10565), before of that we need to make [Powershell run well](http://tritoneco.com/2014/02/21/fix-for-powershell-script-not-digitally-signed/)
+* [Make the internal Kubernetes Dashboard can be accessed by outside](https://www.debuntu.org/how-to-redirecting-network-traffic-to-a-new-ip-using-iptables/)
 
 ```
 > sysctl net.ipv4.ip_forward=1
@@ -382,8 +390,25 @@ EOF
 > iptables -t nat -A POSTROUTING -j MASQUERADE
 ```
 
-- [Install `samba` on ubuntu VM](https://tutorials.ubuntu.com/tutorial/install-and-configure-samba)
-- Open ubuntu VM port (if needed)
+* [Install `samba` on ubuntu VM](https://tutorials.ubuntu.com/tutorial/install-and-configure-samba)
+
+* `socat` on Ubuntu Server
+
+```
+> sudo apt-get install socat
+> socat -v tcp-listen:30000,fork tcp:192.168.99.100:30000
+```
+
+* ngrok on Ubuntu server
+
+```
+> wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+> unzip ngrok-stable-linux-amd64.zip
+> mk dashboard --url
+> ./ngrok http 192.168.99.100:30000 -region ap
+```
+
+* Open ubuntu VM port (if needed)
 
 ```
 > sudo iptables -I INPUT -p tcp --dport 2375 -j ACCEPT
